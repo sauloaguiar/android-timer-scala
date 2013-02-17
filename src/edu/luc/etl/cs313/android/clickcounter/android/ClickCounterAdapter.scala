@@ -80,8 +80,8 @@ class MainActivity extends Activity {
    *            the event source
    */
   def onIncrement(view: View) {
-    model.get.increment();
-    updateView();
+    model.get.increment()
+    updateView()
   }
 
   /**

@@ -1,4 +1,5 @@
-package edu.luc.etl.cs313.android.clickcounter.model
+package edu.luc.etl.cs313.android.clickcounter
+package model
 
 class DefaultBoundedCounter(min: Int = 0, max: Int = 10) extends Counter{
 
@@ -30,7 +31,7 @@ class DefaultBoundedCounter(min: Int = 0, max: Int = 10) extends Counter{
   }
 
   override def reset() {
-    value = min;
+    value = min
     assert { dataInvariant && isEmpty }
   }
 
