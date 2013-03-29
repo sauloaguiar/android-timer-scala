@@ -1,20 +1,25 @@
 package edu.luc.etl.cs313.android.scala.clickcounter
-package model
+package model.mutable
 
 /**
- * An immutable counter abstraction.
+ * An mutable counter abstraction.
  *
  * @author laufer
  */
 trait Counter {
 
   /**
+   * Returns the counter value.
+   */
+  def get(): Int
+
+  /**
    * Increments the counter value.
    */
-  def increment(value: Int): Option[Int]
+  def increment(): Unit
 
   /**
    * Decrements the counter value.
    */
-  def decrement(value: Int): Option[Int]
+  def decrement(): Unit
 }

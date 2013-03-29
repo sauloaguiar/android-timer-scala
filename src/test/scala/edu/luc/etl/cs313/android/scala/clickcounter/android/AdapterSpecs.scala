@@ -6,7 +6,7 @@ import org.mockito.Mockito._
 import org.scalatest.matchers.ShouldMatchers
 import org.scalatest.FunSpec
 import org.scalatest.mock.MockitoSugar
-import model.BoundedCounter
+import model.mutable.BoundedCounter
 import org.mockito.InOrder
 
 /**
@@ -30,19 +30,20 @@ class AdapterSpecs extends FunSpec with ShouldMatchers with MockitoSugar {
     // create mock instances of the collaborators
     val min = 0
     val max = 10
-    val model = mock[BoundedCounter]
     val view = mock[View]
-    val order = inOrder(model, view)
+    val model = mock[BoundedCounter]
     // stub certain methods
     when(model.min).thenReturn(min)
     when(model.max).thenReturn(max)
+    val order = inOrder(model, view)
     // create subject-under-test (SUT)
+    val mdl = model
     val adapter = new AbstractAdapter {
+      override lazy val model = mdl // injected dependency
       override def updateView() {
         view.update() // hard-coded dependency
       }
     }
-    adapter.setBehavior(model) // injected dependency
   }
 
   describe("A clickcounter adapter") ({
@@ -51,10 +52,9 @@ class AdapterSpecs extends FunSpec with ShouldMatchers with MockitoSugar {
       val f = fixture()
       import f._
       // exercise SUT
-      adapter.setState(min)
       adapter.onIncrement(null)
       // verify interaction with collaborators
-      order.verify(model).increment(min)
+      order.verify(model).increment()
       order.verify(view).update()
     })
     it("handles onDecrement") ({
@@ -62,10 +62,9 @@ class AdapterSpecs extends FunSpec with ShouldMatchers with MockitoSugar {
       val f = fixture()
       import f._
       // exercise SUT
-      adapter.setState(max)
       adapter.onDecrement(null)
       // verify interaction with collaborators
-      order.verify(model).decrement(max)
+      order.verify(model).decrement()
       order.verify(view).update()
     })
     it("handles onReset") ({
@@ -73,10 +72,9 @@ class AdapterSpecs extends FunSpec with ShouldMatchers with MockitoSugar {
       val f = fixture()
       import f._
       // exercise SUT
-      adapter.setState(max)
       adapter.onReset(null)
       // verify interaction with collaborators
-      order.verify(model).reset(max)
+      order.verify(model).reset()
       order.verify(view).update()
     })
   })
