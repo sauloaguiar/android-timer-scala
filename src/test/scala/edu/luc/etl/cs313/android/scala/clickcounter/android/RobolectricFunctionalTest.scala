@@ -13,7 +13,7 @@ import org.robolectric.RobolectricTestRunner
  * @author laufer
  * @see http://pivotal.github.com/robolectric
  */
-@Ignore
+//@Ignore
 @RunWith(classOf[RobolectricTestRunner])
 class RobolectricFunctionalTest extends AbstractFunctionalTest {
 

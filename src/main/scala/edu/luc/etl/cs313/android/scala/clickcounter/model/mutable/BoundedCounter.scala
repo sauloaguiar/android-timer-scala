@@ -1,8 +1,8 @@
 package edu.luc.etl.cs313.android.scala.clickcounter
-package model
+package model.mutable
 
 /**
- * An immutable bounded counter abstraction.
+ * An mutable bounded counter abstraction.
  *
  * @author laufer
  */
@@ -15,15 +15,15 @@ trait BoundedCounter extends Counter {
   /**
    * Resets the counter value.
    */
-  def reset(value: Int): Option[Int]
+  def reset(): Unit
 
   /**
    * Indicates whether the counter is full (at its maximum).
    */
-  def isFull(value: Int): Boolean
+  def isFull(): Boolean
 
   /**
    * Indicates whether the counter is empty (at its minimum).
    */
-  def isEmpty(value: Int): Boolean
+  def isEmpty(): Boolean
 }

@@ -7,10 +7,10 @@ import AndroidNdkKeys._
 object General {
   // Some basic configuration
   val settings = Defaults.defaultSettings ++ Seq (
-    name := "clickcounter-android-scala",
+    name := "clickcounter-mutable-android-scala",
     version := "0.1",
     versionCode := 0,
-    scalaVersion := "2.10.1-RC2",
+    scalaVersion := "2.10.1",
     scalacOptions := Seq("-language:implicitConversions", "-feature", "-unchecked", "-deprecation", "-encoding", "utf8"),
     platformName in Android := "android-17",
     parallelExecution in Test := false
