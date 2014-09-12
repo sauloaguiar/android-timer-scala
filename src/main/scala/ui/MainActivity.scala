@@ -1,10 +1,10 @@
-package edu.luc.etl.cs313.android.scala.clickcounter
-package android
+package edu.luc.etl.cs313.scala.clickcounter
+package ui
 
-import _root_.android.app.Activity
-import _root_.android.os.Bundle
-import _root_.android.util.Log
-import edu.luc.etl.cs313.android.scala.clickcounter.model.{DefaultBoundedCounter, BoundedCounter}
+import android.app.Activity
+import android.os.Bundle
+import android.util.Log
+import model.{DefaultBoundedCounter, BoundedCounter}
 
 /**
  * The main Android activity, which provides the required lifecycle methods.

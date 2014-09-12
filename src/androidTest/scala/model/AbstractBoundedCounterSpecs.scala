@@ -1,4 +1,4 @@
-package edu.luc.etl.cs313.android.scala.clickcounter.model
+package edu.luc.etl.cs313.scala.clickcounter.model
 
 import org.scalatest.{FunSpec, Matchers}
 

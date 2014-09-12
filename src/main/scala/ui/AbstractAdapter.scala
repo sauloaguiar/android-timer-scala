@@ -1,7 +1,7 @@
-package edu.luc.etl.cs313.android.scala.clickcounter
-package android
+package edu.luc.etl.cs313.scala.clickcounter
+package ui
 
-import _root_.android.view.View
+import android.view.View
 import model._
 
 /**
