@@ -1,4 +1,4 @@
-package edu.luc.etl.cs313.android.scala.clickcounter
+package edu.luc.etl.cs313.scala.clickcounter
 package model
 
 /**
