@@ -1,10 +1,13 @@
-package edu.luc.etl.cs313.scala.clickcounter
+package edu.luc.etl.cs313.scala.stopwatch
 package ui
 
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
-import model.{DefaultBoundedCounter, BoundedCounter}
+import android.view.View
+import common.listeners.StopwatchUIUpdateListener
+import common.Constants
+import model.{ConcreteStopwatchModelFacade, StopwatchModelFacade}
 
 /**
  * The main Android activity, which provides the required lifecycle methods.
@@ -13,12 +16,12 @@ import model.{DefaultBoundedCounter, BoundedCounter}
  * model. The model implementation is configured externally via the resource
  * R.string.model_class.
  */
-class MainActivity extends Activity with TypedActivity with AbstractAdapter {
+class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateListener {
 
-  private def TAG = "clickcounter-android-activity"
+  private def TAG = "stopwatch-android-activity"
 
   // inject the dependency on the model
-  override lazy val model = new DefaultBoundedCounter
+  lazy val model = new ConcreteStopwatchModelFacade(this)
 
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
@@ -30,18 +33,53 @@ class MainActivity extends Activity with TypedActivity with AbstractAdapter {
   override def onStart() {
     super.onStart()
     Log.i(TAG, "onStart")
-    updateView()
+    model.onStart()
+  }
+
+  // TODO remaining lifecycle methods
+
+  /**
+   * Forwards the semantic ``onStartStop`` event to the model.
+   * (Semantic as opposed to, say, a concrete button press.)
+   * This and similar events are connected to the
+   * corresponding onClick events (actual button presses) in the view itself,
+   * usually with the help of the graphical layout editor; the connection also
+   * shows up in the XML source of the view layout.
+   */
+  def onStartStop(view: View): Unit = { model.onStartStop() }
+
+  /** Forwards the semantic ``onLapReset`` event to the model. */
+  def onLapReset(view: View): Unit = { model.onLapReset() }
+
+  /** Automatically converts a block of code to a Runnable. */
+  implicit def blockToRunnable(block: => Unit) = new Runnable() { override def run() { block } }
+
+  /**
+   * Updates the seconds and minutes in the UI.
+   * @param time
+   */
+  def updateTime(time: Int): Unit = {
+    // UI adapter responsibility to schedule incoming events on UI thread
+    runOnUiThread({
+      val tvS = findView(TR.seconds)
+      val tvM = findView(TR.minutes)
+      val seconds = time % Constants.SEC_PER_MIN
+      val minutes = time / Constants.SEC_PER_MIN
+      tvS.setText((seconds / 10).toString + (seconds % 10).toString)
+      tvM.setText(Integer.toString(minutes / 10) + Integer.toString(minutes % 10))
+    })
   }
 
   /**
-   * Updates the concrete view from the model.
+   * Updates the state name in the UI.
+   * @param stateId
    */
-  override protected def updateView()  = {
-    import scala.language.postfixOps
-    // update display
-    findView(TR.textview_value).setText(model.get.toString)
-    // afford controls according to model state
-    findView(TR.button_increment).setEnabled(! model.isFull)
-    findView(TR.button_decrement).setEnabled(! model.isEmpty)
+  def updateState(stateId: Int): Unit = {
+    // UI adapter responsibility to schedule incoming events on UI thread
+    runOnUiThread({
+      val stateName = findView(TR.stateName)
+      stateName.setText(getString(stateId))
+    })
   }
+
 }

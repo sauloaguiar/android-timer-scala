@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.luc.etl.cs313.scala.clickcounter.ui"
+    package="edu.luc.etl.cs313.scala.stopwatch.ui"
     android:versionCode="1"
     android:versionName="0.2">
 

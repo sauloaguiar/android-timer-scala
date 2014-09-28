@@ -4,7 +4,6 @@ package ui
 import org.mockito.Mockito._
 import org.scalatest.FunSpec
 import org.scalatest.mock.MockitoSugar
-import model.BoundedCounter
 
 /**
  * A unit test of AbstractAdapter that uses mocking to satisfy the dependencies
