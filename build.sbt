@@ -8,9 +8,9 @@ import android.Keys._
 
 android.Plugin.androidBuild
 
-name := "clickcounter-android-scala"
+name := "stopwatch-android-scala"
 
-version := "0.0.2"
+version := "0.0.1"
 
 scalacOptions in Compile ++= Seq("-feature", "-unchecked", "-deprecation")
 
