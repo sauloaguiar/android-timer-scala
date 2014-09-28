@@ -20,8 +20,9 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
 
   private def TAG = "stopwatch-android-activity"
 
-  // inject the dependency on the model
-  lazy val model = new ConcreteStopwatchModelFacade(this)
+  // inject the dependency on the model into this and the
+  // dependency on this into the model using constructor injection
+  lazy val model: StopwatchModelFacade = new ConcreteStopwatchModelFacade(this)
 
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
@@ -36,7 +37,7 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
     model.onStart()
   }
 
-  // TODO remaining lifecycle methods
+  // TODO remaining lifecycle methods - especially support for rotation
 
   /**
    * Forwards the semantic ``onStartStop`` event to the model.
@@ -46,13 +47,14 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
    * usually with the help of the graphical layout editor; the connection also
    * shows up in the XML source of the view layout.
    */
-  def onStartStop(view: View): Unit = { model.onStartStop() }
+  def onStartStop(view: View) = model.onStartStop()
 
   /** Forwards the semantic ``onLapReset`` event to the model. */
-  def onLapReset(view: View): Unit = { model.onLapReset() }
+  def onLapReset(view: View): Unit = model.onLapReset()
 
-  /** Automatically converts a block of code to a Runnable. */
-  implicit def blockToRunnable(block: => Unit) = new Runnable() { override def run() { block } }
+  /** Wraps a block of code in a Runnable and runs it on the UI thread. */
+  protected def runOnUiThread(block: => Unit): Unit =
+    runOnUiThread(new Runnable() { override def run(): Unit = block })
 
   /**
    * Updates the seconds and minutes in the UI.
@@ -60,14 +62,14 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
    */
   def updateTime(time: Int): Unit = {
     // UI adapter responsibility to schedule incoming events on UI thread
-    runOnUiThread({
+    runOnUiThread {
       val tvS = findView(TR.seconds)
       val tvM = findView(TR.minutes)
       val seconds = time % Constants.SEC_PER_MIN
       val minutes = time / Constants.SEC_PER_MIN
       tvS.setText((seconds / 10).toString + (seconds % 10).toString)
       tvM.setText(Integer.toString(minutes / 10) + Integer.toString(minutes % 10))
-    })
+    }
   }
 
   /**
@@ -76,10 +78,9 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
    */
   def updateState(stateId: Int): Unit = {
     // UI adapter responsibility to schedule incoming events on UI thread
-    runOnUiThread({
+    runOnUiThread {
       val stateName = findView(TR.stateName)
       stateName.setText(getString(stateId))
-    })
+    }
   }
-
 }
