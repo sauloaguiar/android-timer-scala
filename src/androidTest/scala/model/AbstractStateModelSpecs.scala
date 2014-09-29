@@ -76,7 +76,7 @@ trait AbstractStateModelSpecs extends JUnitSuite {
     assertEquals(R.string.LAP_STOPPED, dependency.getState)
     assertFalse(dependency.isStarted)
     assertEquals(5, dependency.getTime)
-    model.onLapReset();
+    model.onLapReset()
     assertEquals(R.string.STOPPED, dependency.getState)
     assertFalse(dependency.isStarted)
     assertEquals(9, dependency.getTime)
