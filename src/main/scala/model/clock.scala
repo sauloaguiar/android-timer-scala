@@ -25,9 +25,9 @@ object clock {
 
     // TODO make accurate by keeping track of partial seconds when canceled etc.
 
-    private var timer: Timer = null
+    private var timer: Timer = _
 
-    private var listener: OnTickListener = null
+    private var listener: OnTickListener = _
 
     override def setOnTickListener(listener: OnTickListener) = this.listener = listener
 
