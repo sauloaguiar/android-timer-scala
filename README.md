@@ -8,6 +8,7 @@
 * add code coverage plugin
 * add dependency/stability metrics plugin
 * consider other useful code quality plugins (checkstyle etc.)
+* update models from Java version
   
 # Learning Objectives
 
