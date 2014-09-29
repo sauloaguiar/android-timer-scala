@@ -10,11 +10,9 @@ import state.{DefaultStopwatchStateMachine, StopwatchStateMachine}
 class ConcreteStopwatchModelFacade(listener: StopwatchUIUpdateListener) extends StopwatchModelFacade {
 
   val timeModel: TimeModel   = new DefaultTimeModel
-  val clockModel: ClockModel = new DefaultClockModel
+  val clockModel: ClockModel = new DefaultClockModel(stateMachine)
   val stateMachine: StopwatchStateMachine =
     new DefaultStopwatchStateMachine(timeModel, clockModel, listener)
-
-  clockModel.setOnTickListener(stateMachine)
 
   override def onStart()     = stateMachine.actionInit()
   override def onStartStop() = stateMachine.onStartStop()
