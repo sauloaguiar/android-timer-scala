@@ -30,7 +30,7 @@ object state {
   ) extends StopwatchStateMachine {
 
     /** The current internal state of this adapter component. Required for the State pattern. */
-    private var state: StopwatchState = null
+    private var state: StopwatchState = _
 
     protected def setState(state: StopwatchState): Unit = {
       this.state = state

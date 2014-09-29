@@ -53,7 +53,7 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
   def onLapReset(view: View): Unit = model.onLapReset()
 
   /** Wraps a block of code in a Runnable and runs it on the UI thread. */
-  protected def runOnUiThread(block: => Unit): Unit =
+  def runOnUiThread(block: => Unit): Unit =
     runOnUiThread(new Runnable() { override def run(): Unit = block })
 
   /**
