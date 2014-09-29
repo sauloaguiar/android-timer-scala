@@ -27,7 +27,7 @@ trait AbstractFunctionalTest {
   @Test def testActivityScenarioRun(): Unit = {
     activity.runOnUiThread {
       assertEquals(0, getDisplayedValue)
-      assertTrue(getStartStopButton().performClick());
+      assertTrue(getStartStopButton().performClick())
     }
     Thread.sleep(5500) // <-- do not run this in the UI thread!
     runUiThreadTasks()
