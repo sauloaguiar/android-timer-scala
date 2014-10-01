@@ -22,6 +22,8 @@ object clock {
 
     // TODO make accurate by keeping track of partial seconds when canceled etc.
 
+    private val DELAY = 1000
+
     private var timer: Timer = _
 
 //    private var listener: OnTickListener = _
@@ -33,7 +35,7 @@ object clock {
       // The clock model runs onTick every 1000 milliseconds
       timer.schedule(new TimerTask() {
         override def run() = listener.onTick() // fire event
-      }, /*initial delay*/ 1000, /*periodic delay*/ 1000)
+      }, /*initial delay*/ DELAY, /*periodic delay*/ DELAY)
     }
 
     override def stop() = { timer.cancel() ; timer = null }
