@@ -58,13 +58,13 @@ object state {
     def toLapStoppedState(): Unit =  setState(LAP_STOPPED)
 
     // actions
-    override def actionInit(): Unit =  { toStoppedState() ; actionReset() }
-    def actionReset(): Unit         =  { timeModel.resetRuntime() ; actionUpdateView() }
-    def actionStart(): Unit         =  { clockModel.start() }
-    def actionStop(): Unit          =  { clockModel.stop() }
-    def actionLap(): Unit           =  { timeModel.setLaptime() }
-    def actionInc(): Unit           =  { timeModel.incRuntime() ; actionUpdateView() }
-    def actionUpdateView(): Unit    =  { state.updateView() }
+    override def actionInit(): Unit = { toStoppedState() ; actionReset() }
+    def actionReset(): Unit         = { timeModel.resetRuntime() ; actionUpdateView() }
+    def actionStart(): Unit         = { clockModel.start() }
+    def actionStop(): Unit          = { clockModel.stop() }
+    def actionLap(): Unit           = { timeModel.setLaptime() }
+    def actionInc(): Unit           = { timeModel.incRuntime() ; actionUpdateView() }
+    def actionUpdateView(): Unit    = { state.updateView() }
   }
 
   class StoppedState(sm: DefaultStopwatchStateMachine) extends StopwatchState {
