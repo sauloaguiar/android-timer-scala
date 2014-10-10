@@ -5,7 +5,7 @@ import org.junit.Assert._
 import org.junit.Test
 import org.scalatest.junit.JUnitSuite
 import ui.R
-import common.listeners.StopwatchUIUpdateListener
+import common.StopwatchUIUpdateListener
 import clock.ClockModel
 import state.StopwatchStateMachine
 import time.TimeModel

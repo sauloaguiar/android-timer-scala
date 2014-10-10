@@ -26,10 +26,6 @@ object clock {
 
     private var timer: Timer = _
 
-//    private var listener: OnTickListener = _
-//
-//    override def setOnTickListener(listener: OnTickListener) = this.listener = listener
-
     override def start() = {
       timer = new Timer()
       // The clock model runs onTick every 1000 milliseconds

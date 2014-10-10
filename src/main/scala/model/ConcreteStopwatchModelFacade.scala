@@ -1,7 +1,7 @@
 package edu.luc.etl.cs313.scala.stopwatch
 package model
 
-import common.listeners.StopwatchUIUpdateListener
+import common.{StopwatchUIUpdateListener, StopwatchModelFacade}
 import time._
 import clock._
 import state.{DefaultStopwatchStateMachine, StopwatchStateMachine}
