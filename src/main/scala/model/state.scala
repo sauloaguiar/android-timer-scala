@@ -1,20 +1,22 @@
 package edu.luc.etl.cs313.scala.stopwatch
 package model
 
-import common.listeners.{StopwatchUIUpdateListener, StopwatchUIListener}
+import common.{StopwatchUIUpdateListener, StopwatchUIListener}
 import edu.luc.etl.cs313.scala.stopwatch.ui.R
 import time.TimeModel
 import clock.{ClockModel, OnTickListener}
 
 object state {
 
+  trait Initializable {
+    def actionInit(): Unit
+  }
+
   /**
    * The state machine for the state-based dynamic model of the stopwatch.
    * This interface is part of the State pattern.
    */
-  trait StopwatchStateMachine extends StopwatchUIListener with OnTickListener {
-    def actionInit(): Unit
-  }
+  trait StopwatchStateMachine extends StopwatchUIListener with OnTickListener with Initializable
 
   /** A state in a state machine. This interface is part of the State pattern.  */
   trait StopwatchState extends StopwatchUIListener with OnTickListener {

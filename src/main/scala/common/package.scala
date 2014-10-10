@@ -1,6 +1,6 @@
-package edu.luc.etl.cs313.scala.stopwatch.common
+package edu.luc.etl.cs313.scala.stopwatch
 
-object listeners {
+package object common {
 
   /** A listener for stopwatch events coming from the UI. */
   trait StopwatchUIListener {
@@ -17,4 +17,10 @@ object listeners {
     def updateTime(timeValue: Int): Unit
     def updateState(stateId: Int): Unit
   }
+
+  trait Startable {
+    def onStart(): Unit
+  }
+
+  trait StopwatchModelFacade extends StopwatchUIListener with Startable
 }

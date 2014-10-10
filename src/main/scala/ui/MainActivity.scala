@@ -5,9 +5,8 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import common.listeners.StopwatchUIUpdateListener
-import common.Constants
-import model.{ConcreteStopwatchModelFacade, StopwatchModelFacade}
+import common.{Constants, StopwatchUIUpdateListener, StopwatchModelFacade}
+import model.ConcreteStopwatchModelFacade
 
 /**
  * The main Android activity, which provides the required lifecycle methods.
@@ -68,7 +67,7 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
       val seconds = time % Constants.SEC_PER_MIN
       val minutes = time / Constants.SEC_PER_MIN
       tvS.setText((seconds / 10).toString + (seconds % 10).toString)
-      tvM.setText(Integer.toString(minutes / 10) + Integer.toString(minutes % 10))
+      tvM.setText((minutes / 10).toString + (minutes % 10).toString)
     }
   }
 
