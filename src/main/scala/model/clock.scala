@@ -3,6 +3,7 @@ package model
 
 import java.util.{TimerTask, Timer}
 
+/** Contains the components for the event-based clock timer. */
 object clock {
 
   /** A listener for onTick events coming from the internal clock model.  */

@@ -6,11 +6,10 @@ import edu.luc.etl.cs313.scala.stopwatch.ui.R
 import time.TimeModel
 import clock.{ClockModel, OnTickListener}
 
+/** Contains the components of the dynamic state machine model. */
 object state {
 
-  trait Initializable {
-    def actionInit(): Unit
-  }
+  trait Initializable { def actionInit(): Unit }
 
   /**
    * The state machine for the state-based dynamic model of the stopwatch.
@@ -47,12 +46,6 @@ object state {
     def updateUIRuntime(): Unit = uiUpdateListener.updateTime(timeModel.getRuntime())
     def updateUILaptime(): Unit = uiUpdateListener.updateTime(timeModel.getLaptime())
 
-    // known states
-    private val STOPPED     = new StoppedState(this)
-    private val RUNNING     = new RunningState(this)
-    private val LAP_RUNNING = new LapRunningState(this)
-    private val LAP_STOPPED = new LapStoppedState(this)
-
     // transitions
     def toRunningState(): Unit    =  setState(RUNNING)
     def toStoppedState(): Unit    =  setState(STOPPED)
@@ -67,37 +60,39 @@ object state {
     def actionLap(): Unit            = { timeModel.setLaptime() }
     def actionInc(): Unit            = { timeModel.incRuntime() ; actionUpdateView() }
     def actionUpdateView(): Unit     = { state.updateView() }
-  }
 
-  class StoppedState(sm: DefaultStopwatchStateMachine) extends StopwatchState {
-    override def onStartStop() = { sm.actionStart() ; sm.toRunningState() }
-    override def onLapReset()  = { sm.actionReset() ; sm.toStoppedState() }
-    override def onTick()      = throw new UnsupportedOperationException("onTick")
-    override def updateView()  = sm.updateUIRuntime()
-    override def getId()       = R.string.STOPPED
-  }
+    // known states
 
-  class RunningState(sm: DefaultStopwatchStateMachine) extends StopwatchState {
-    override def onStartStop() = { sm.actionStop() ; sm.toStoppedState() }
-    override def onLapReset()  = { sm.actionLap() ; sm.toLapRunningState() }
-    override def onTick()      = { sm.actionInc() ; sm.toRunningState() }
-    override def updateView()  = sm.updateUIRuntime()
-    override def getId()       = R.string.RUNNING
-  }
+    private val STOPPED = new StopwatchState {
+      override def onStartStop() = { actionStart() ; toRunningState() }
+      override def onLapReset()  = { actionReset() ; toStoppedState() }
+      override def onTick()      = throw new UnsupportedOperationException("onTick")
+      override def updateView()  = updateUIRuntime()
+      override def getId()       = R.string.STOPPED
+    }
 
-  class LapRunningState(sm: DefaultStopwatchStateMachine) extends StopwatchState {
-    override def onStartStop() = { sm.actionStop() ; sm.toLapStoppedState() }
-    override def onLapReset()  = { sm.toRunningState() ; sm.actionUpdateView() }
-    override def onTick()      = { sm.actionInc() ; sm.toLapRunningState() }
-    override def updateView()  = sm.updateUILaptime()
-    override def getId()       = R.string.LAP_RUNNING
-  }
+    private val RUNNING = new StopwatchState {
+      override def onStartStop() = { actionStop() ; toStoppedState() }
+      override def onLapReset()  = { actionLap() ; toLapRunningState() }
+      override def onTick()      = { actionInc() ; toRunningState() }
+      override def updateView()  = updateUIRuntime()
+      override def getId()       = R.string.RUNNING
+    }
 
-  class LapStoppedState(sm: DefaultStopwatchStateMachine) extends StopwatchState {
-    override def onStartStop() = { sm.actionStart() ; sm.toLapRunningState() }
-    override def onLapReset()  = { sm.toStoppedState() ; sm.actionUpdateView() }
-    override def onTick()      = throw new UnsupportedOperationException("onTick")
-    override def updateView()  = sm.updateUILaptime()
-    override def getId()       = R.string.LAP_STOPPED
+    private val LAP_RUNNING = new StopwatchState {
+      override def onStartStop() = { actionStop() ; toLapStoppedState() }
+      override def onLapReset()  = { toRunningState() ; actionUpdateView() }
+      override def onTick()      = { actionInc() ; toLapRunningState() }
+      override def updateView()  = updateUILaptime()
+      override def getId()       = R.string.LAP_RUNNING
+    }
+
+    private val LAP_STOPPED = new StopwatchState {
+      override def onStartStop() = { actionStart() ; toLapRunningState() }
+      override def onLapReset()  = { toStoppedState() ; actionUpdateView() }
+      override def onTick()      = throw new UnsupportedOperationException("onTick")
+      override def updateView()  = updateUILaptime()
+      override def getId()       = R.string.LAP_STOPPED
+    }
   }
 }

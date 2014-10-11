@@ -3,6 +3,7 @@ package model
 
 import common.Constants._
 
+/** Contains the components of the passive time model. */
 object time {
 
   /** The passive data model of the stopwatch. It does not emit any events. */

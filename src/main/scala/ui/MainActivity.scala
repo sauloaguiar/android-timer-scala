@@ -5,7 +5,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import common.{Constants, StopwatchUIUpdateListener, StopwatchModelFacade}
+import common.{Constants, StopwatchUIUpdateListener, StopwatchModel}
 import model.ConcreteStopwatchModelFacade
 
 /**
@@ -19,9 +19,13 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
 
   private def TAG = "stopwatch-android-activity"
 
-  // inject the dependency on the model into this and the
-  // dependency on this into the model using constructor injection
-  lazy val model: StopwatchModelFacade = new ConcreteStopwatchModelFacade(this)
+  /**
+   * The model on which this activity depends. The model also depends on
+   * this activity; we inject this dependency using abstract member override.
+   */
+  private val model: StopwatchModel = new ConcreteStopwatchModelFacade {
+    lazy val listener = MainActivity.this
+  }
 
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
@@ -56,30 +60,24 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
     runOnUiThread(new Runnable() { override def run(): Unit = block })
 
   /**
-   * Updates the seconds and minutes in the UI.
-   * @param time
+   * Updates the seconds and minutes in the UI. It is this UI adapter's
+   * responsibility to schedule these incoming events on the UI thread.
    */
-  def updateTime(time: Int): Unit = {
-    // UI adapter responsibility to schedule incoming events on UI thread
-    runOnUiThread {
-      val tvS = findView(TR.seconds)
-      val tvM = findView(TR.minutes)
-      val seconds = time % Constants.SEC_PER_MIN
-      val minutes = time / Constants.SEC_PER_MIN
-      tvS.setText((seconds / 10).toString + (seconds % 10).toString)
-      tvM.setText((minutes / 10).toString + (minutes % 10).toString)
-    }
+  def updateTime(time: Int): Unit = runOnUiThread {
+    val tvS = findView(TR.seconds)
+    val tvM = findView(TR.minutes)
+    val seconds = time % Constants.SEC_PER_MIN
+    val minutes = time / Constants.SEC_PER_MIN
+    tvS.setText((seconds / 10).toString + (seconds % 10).toString)
+    tvM.setText((minutes / 10).toString + (minutes % 10).toString)
   }
 
   /**
-   * Updates the state name in the UI.
-   * @param stateId
+   * Updates the state name shown in the UI. It is this UI adapter's
+   * responsibility to schedule these incoming events on the UI thread.
    */
-  def updateState(stateId: Int): Unit = {
-    // UI adapter responsibility to schedule incoming events on UI thread
-    runOnUiThread {
-      val stateName = findView(TR.stateName)
-      stateName.setText(getString(stateId))
-    }
+  def updateState(stateId: Int): Unit = runOnUiThread {
+    val stateName = findView(TR.stateName)
+    stateName.setText(getString(stateId))
   }
 }
