@@ -1,13 +1,13 @@
 package edu.luc.etl.cs313.scala.stopwatch
 package model
 
-import common.{StopwatchUIUpdateListener, StopwatchModelFacade}
+import common.StopwatchModel
 import time._
 import clock._
 import state.{DefaultStopwatchStateMachine, StopwatchStateMachine}
 
-/** An implementation of the model facade. */
-class ConcreteStopwatchModelFacade(listener: StopwatchUIUpdateListener) extends StopwatchModelFacade {
+/** A facade implementation of the model interface. */
+trait ConcreteStopwatchModelFacade extends StopwatchModel {
 
   val timeModel: TimeModel   = new DefaultTimeModel
   val clockModel: ClockModel = new DefaultClockModel(stateMachine)
