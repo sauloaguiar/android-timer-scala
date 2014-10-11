@@ -1,14 +1,10 @@
 # TODO
 
-* add external links to learning outcomes
 * add lifecycle methods, esp. save/restore app state
 * add Mockito
+* update models from Java version
 * review wrt DIP following
   [this post](http://lostechies.com/derickbailey/2011/09/22/dependency-injection-is-not-the-same-as-the-dependency-inversion-principle/)
-* add code coverage plugin
-* add dependency/stability metrics plugin
-* consider other useful code quality plugins (checkstyle etc.)
-* update models from Java version
   
 # Learning Objectives
 
@@ -27,23 +23,25 @@
 
 ## Architecture and Design
 
+http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod
+
 * Key architectural issues and patterns
-    * Simple dependency injection (DI)
-    * Model-view-adapter (MVA) architectural pattern
+    * [Simple dependency injection (DI)](http://www.martinfowler.com/articles/injection.html)
+    * [Model-view-adapter (MVA) architectural pattern](http://en.wikipedia.org/wiki/Model–view–adapter)
     * Mapping MVA to Android
-    * Difference between MVA and model-view-controller (MVC)
+    * [Difference between MVA and model-view-controller (MVC)](https://www.palantir.com/2009/04/model-view-adapter)
     * Distinguishing among dumb, reactive, and autonomous model components
 * Key design patterns
-    * Implementing event-driven behavior using the Observer pattern
-    * Implementing state-dependent behavior using the State pattern
-    * Command pattern for representing tasks as objects
-    * Façade pattern for hiding complexity in the model from the adapter
-* Relevant class-level design principles
+    * Implementing event-driven behavior: [Observer pattern](http://sourcemaking.com/design_patterns/observer)
+    * Implementing state-dependent behavior: [State pattern](http://sourcemaking.com/design_patterns/state)
+    * Hiding complexity in the model from the adapter: [Façade pattern](http://sourcemaking.com/design_patterns/facade)
+    * Representing tasks as objects: [Command pattern](http://sourcemaking.com/design_patterns/command) 
+* [Relevant class-level design principles](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod)
     * Dependency Inversion Principle (DIP)
     * Single Responsibility Principle (SRP)
     * Interface Segregation Principle (ISP)
-* Package-level architecture and relevant principles
-    * Dependency graph
+* Package-level architecture and [relevant principles](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod)
+    * [Dependency graph](http://en.wikipedia.org/wiki/Dependency_graph)
       (see also [here](/lucoodevcourse/stopwatch-android-scala/src/default/doc))
     * Stable Dependencies Principle (SDP)
     * Acyclic Dependencies Principle (ADP)

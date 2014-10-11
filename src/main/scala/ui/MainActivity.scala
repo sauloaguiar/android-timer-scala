@@ -42,6 +42,8 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
 
   // TODO remaining lifecycle methods - especially support for rotation
 
+
+
   /**
    * Forwards the semantic ``onStartStop`` event to the model.
    * (Semantic as opposed to, say, a concrete button press.)
