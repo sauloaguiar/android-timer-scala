@@ -40,9 +40,21 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
     model.onStart()
   }
 
+  override def onStop(): Unit = {
+    super.onStop()
+    Log.i(TAG, "onStart")
+    model.onStop()
+  }
+
+  override def onSaveInstanceState(savedInstanceState: Bundle): Unit = {
+    super.onSaveInstanceState(savedInstanceState)
+  }
+
+  override def onRestoreInstanceState(savedInstanceState: Bundle): Unit = {
+    super.onRestoreInstanceState(savedInstanceState)
+  }
+
   // TODO remaining lifecycle methods - especially support for rotation
-
-
 
   /**
    * Forwards the semantic ``onStartStop`` event to the model.

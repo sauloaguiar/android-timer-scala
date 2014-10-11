@@ -14,7 +14,11 @@ trait ConcreteStopwatchModelFacade extends StopwatchModel {
   val stateMachine: StopwatchStateMachine =
     new DefaultStopwatchStateMachine(timeModel, clockModel, listener)
 
-  override def onStart()     = stateMachine.actionInit()
+  // methods in StopwatchUIListener
   override def onStartStop() = stateMachine.onStartStop()
   override def onLapReset()  = stateMachine.onLapReset()
+
+  // methods in Startable
+  override def onStart()     = stateMachine.actionInit()
+  override def onStop()      = clockModel.stop()
 }
