@@ -17,7 +17,7 @@ object state {
    */
   trait StopwatchStateMachine extends StopwatchUIListener with OnTickListener with Initializable
 
-  /** A state in a state machine. This interface is part of the State pattern.  */
+  /** A state in a state machine. This interface is part of the State pattern. */
   trait StopwatchState extends StopwatchUIListener with OnTickListener {
     def updateView(): Unit
     def getId(): Int

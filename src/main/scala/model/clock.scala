@@ -10,7 +10,7 @@ object clock {
   trait OnTickListener { def onTick(): Unit }
 
   /** The active model of the internal clock that periodically emits tick events. */
-  trait ClockModel { //extends OnTickSource {
+  trait ClockModel {
     def start(): Unit
     def stop(): Unit
   }
@@ -35,6 +35,10 @@ object clock {
       }, /*initial delay*/ DELAY, /*periodic delay*/ DELAY)
     }
 
-    override def stop() = { timer.cancel() ; timer = null }
+    override def stop() =
+      if (timer != null) {
+        timer.cancel()
+        timer = null
+      }
   }
 }

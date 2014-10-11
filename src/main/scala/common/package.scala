@@ -22,9 +22,10 @@ package object common {
     def updateState(stateId: Int): Unit
   }
 
-  /** A component that should be started up along with the app. */
+  /** A component with a start/stop lifecycle tied to the app. */
   trait Startable {
     def onStart(): Unit
+    def onStop(): Unit
   }
 
   /**

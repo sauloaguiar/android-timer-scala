@@ -1,8 +1,6 @@
 # TODO
 
-* add lifecycle methods, esp. save/restore app state
 * add Mockito
-* update models from Java version
 * review wrt DIP following
   [this post](http://lostechies.com/derickbailey/2011/09/22/dependency-injection-is-not-the-same-as-the-dependency-inversion-principle/)
   
@@ -16,10 +14,12 @@
 
 ## Semantics
 
-* Event-driven/asynchronous program execution
+* [Event-driven/asynchronous program execution](http://en.wikipedia.org/wiki/Event-driven_programming)
 * User-triggered input events
 * Internal events from background timers
-* Concurrency issues: single-thread rule of accessing/updating the view in the GUI thread
+* [Concurrency issues: single-thread rule of accessing/updating the view in the GUI thread](http://stackoverflow.com/questions/11772658/why-is-a-single-threaded-model-used-to-update-the-ui-as-main-thread)
+* [Android activity lifecycle](http://developer.android.com/training/basics/activity-lifecycle/starting.html)
+  and [preserving state under rotation](http://developer.android.com/training/basics/activity-lifecycle/recreating.html)
 
 ## Architecture and Design
 
@@ -49,13 +49,13 @@ http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod
 
 ## Testing
 
-* Different types of testing
+* [Different types of testing](http://en.wikipedia.org/wiki/Software_testing)
     * Component-level unit testing
     * System testing
     * Instrumentation testing
-* Mock-based testing
-* Testcase Superclass pattern
-* Test coverage
+* [Mock-based testing](http://martinfowler.com/articles/mocksArentStubs.html)
+* [Testcase Superclass pattern](http://xunitpatterns.com/Testcase%20Superclass.html)
+* [Test coverage](http://en.wikipedia.org/wiki/Code_coverage) (see also [here](http://martinfowler.com/bliki/TestCoverage.html))
 
 # Building and Running
 
