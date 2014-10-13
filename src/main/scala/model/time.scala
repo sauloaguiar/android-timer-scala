@@ -13,6 +13,8 @@ object time {
     def getRuntime(): Int
     def setLaptime(): Unit
     def getLaptime(): Int
+    def setRuntime(value: Int)
+    def setLaptime(value: Int)
   }
 
   /** An implementation of the stopwatch data model. */
@@ -24,5 +26,7 @@ object time {
     override def getRuntime()   = runningTime
     override def setLaptime()   = lapTime = runningTime
     override def getLaptime()   = lapTime
+    override def setRuntime(value: Int) = runningTime = value
+    override def setLaptime(value: Int) = lapTime = value
   }
 }

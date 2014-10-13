@@ -1,9 +1,3 @@
-# TODO
-
-* add Mockito
-* review wrt DIP following
-  [this post](http://lostechies.com/derickbailey/2011/09/22/dependency-injection-is-not-the-same-as-the-dependency-inversion-principle/)
-  
 # Learning Objectives
 
 ## Modeling
@@ -35,7 +29,7 @@ http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod
     * Implementing event-driven behavior: [Observer pattern](http://sourcemaking.com/design_patterns/observer)
     * Implementing state-dependent behavior: [State pattern](http://sourcemaking.com/design_patterns/state)
     * Hiding complexity in the model from the adapter: [Façade pattern](http://sourcemaking.com/design_patterns/facade)
-    * Representing tasks as objects: [Command pattern](http://sourcemaking.com/design_patterns/command) 
+    * Representing tasks as objects: [Command pattern](http://sourcemaking.com/design_patterns/command)
 * [Relevant class-level design principles](http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod)
     * Dependency Inversion Principle (DIP)
     * Single Responsibility Principle (SRP)
@@ -54,7 +48,11 @@ http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod
     * System testing
     * Instrumentation testing
 * [Mock-based testing](http://martinfowler.com/articles/mocksArentStubs.html)
-* [Testcase Superclass pattern](http://xunitpatterns.com/Testcase%20Superclass.html)
+* Key design patterns 
+    * Factoring out reusable test code: [Testcase Superclass pattern](http://xunitpatterns.com/Testcase%20Superclass.html)
+    * Deferring method implementation to subclasses: [Template Method pattern](http://sourcemaking.com/design_patterns/template_method)
+    * Allowing subclasses to decide which class to instantiate: [Factory Method pattern](http://sourcemaking.com/design_patterns/factory_method)
+
 * [Test coverage](http://en.wikipedia.org/wiki/Code_coverage) (see also [here](http://martinfowler.com/bliki/TestCoverage.html))
 
 # Building and Running

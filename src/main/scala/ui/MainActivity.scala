@@ -5,7 +5,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import common.{Constants, StopwatchUIUpdateListener, StopwatchModel}
+import common._
 import model.ConcreteStopwatchModelFacade
 
 /**
@@ -17,7 +17,7 @@ import model.ConcreteStopwatchModelFacade
  */
 class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateListener {
 
-  private def TAG = "stopwatch-android-activity"
+  private val TAG = "stopwatch-android-activity"
 
   /**
    * The model on which this activity depends. The model also depends on
@@ -40,21 +40,22 @@ class MainActivity extends Activity with TypedActivity with StopwatchUIUpdateLis
     model.onStart()
   }
 
-  override def onStop(): Unit = {
-    super.onStop()
-    Log.i(TAG, "onStart")
-    model.onStop()
-  }
+  private val KEY = "stopwatch-memento"
+
+  // TODO restore complete clock state on rotation
 
   override def onSaveInstanceState(savedInstanceState: Bundle): Unit = {
+    Log.i(TAG, "onSaveInstanceState")
+    model.onStop()
+    savedInstanceState.putSerializable(KEY, model.getMemento)
     super.onSaveInstanceState(savedInstanceState)
   }
 
   override def onRestoreInstanceState(savedInstanceState: Bundle): Unit = {
     super.onRestoreInstanceState(savedInstanceState)
+    Log.i(TAG, "onRestoreInstanceState")
+    model.restoreFromMemento(savedInstanceState.getSerializable(KEY).asInstanceOf[StopwatchMemento])
   }
-
-  // TODO remaining lifecycle methods - especially support for rotation
 
   /**
    * Forwards the semantic ``onStartStop`` event to the model.

@@ -61,7 +61,7 @@ trait AbstractStateModelSpecs extends JUnitSuite {
     val model = fixtureSUT(dependency)
     model.actionInit()
     assertEquals(0, dependency.getTime)
-    // directly invoke the button press event handler methods
+    // directly invoke the button press event handler methods on model
     model.onStartStop()
     assertEquals(R.string.RUNNING, dependency.getState)
     assertTrue(dependency.isStarted)
@@ -112,4 +112,6 @@ class UnifiedMockDependency extends TimeModel with ClockModel with StopwatchUIUp
   override def getRuntime(): Int = runningTime
   override def setLaptime(): Unit = lapTime = runningTime
   override def getLaptime(): Int  = lapTime
+  override def setLaptime(value: Int): Unit = ()
+  override def setRuntime(value: Int): Unit = ()
 }
