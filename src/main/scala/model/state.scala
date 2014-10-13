@@ -15,7 +15,10 @@ object state {
    * The state machine for the state-based dynamic model of the stopwatch.
    * This interface is part of the State pattern.
    */
-  trait StopwatchStateMachine extends StopwatchUIListener with OnTickListener with Initializable
+  trait StopwatchStateMachine extends StopwatchUIListener with OnTickListener with Initializable {
+    def getState(): StopwatchState
+    def actionUpdateView(): Unit
+  }
 
   /** A state in a state machine. This interface is part of the State pattern. */
   trait StopwatchState extends StopwatchUIListener with OnTickListener {
@@ -28,23 +31,25 @@ object state {
     timeModel: TimeModel,
     clockModel: ClockModel,
     uiUpdateListener: StopwatchUIUpdateListener
-  ) extends StopwatchStateMachine {
+  ) extends StopwatchStateMachine with Serializable {
 
-    /** The current internal state of this adapter component. Required for the State pattern. */
+    /** The current internal state of this adapter component. Part of the State pattern. */
     private var state: StopwatchState = _
 
     protected def setState(state: StopwatchState): Unit = {
       this.state = state
-      uiUpdateListener.updateState(state.getId())
+      uiUpdateListener.updateState(state.getId)
     }
+
+    def getState(): StopwatchState = state
 
     // forward event uiUpdateListener methods to the current state
     override def onStartStop(): Unit = state.onStartStop()
     override def onLapReset(): Unit  = state.onLapReset()
     override def onTick(): Unit      = state.onTick()
 
-    def updateUIRuntime(): Unit = uiUpdateListener.updateTime(timeModel.getRuntime())
-    def updateUILaptime(): Unit = uiUpdateListener.updateTime(timeModel.getLaptime())
+    def updateUIRuntime(): Unit = uiUpdateListener.updateTime(timeModel.getRuntime)
+    def updateUILaptime(): Unit = uiUpdateListener.updateTime(timeModel.getLaptime)
 
     // transitions
     def toRunningState(): Unit    =  setState(RUNNING)
@@ -53,13 +58,13 @@ object state {
     def toLapStoppedState(): Unit =  setState(LAP_STOPPED)
 
     // actions
-    override def actionInit(): Unit = { toStoppedState() ; actionReset() }
+    override def actionInit(): Unit       = { toStoppedState() ; actionReset() }
+    override def actionUpdateView(): Unit = state.updateView()
     def actionReset(): Unit          = { timeModel.resetRuntime() ; actionUpdateView() }
     def actionStart(): Unit          = { clockModel.start() }
     def actionStop(): Unit           = { clockModel.stop() }
     def actionLap(): Unit            = { timeModel.setLaptime() }
     def actionInc(): Unit            = { timeModel.incRuntime() ; actionUpdateView() }
-    def actionUpdateView(): Unit     = { state.updateView() }
 
     // known states
 

@@ -38,5 +38,14 @@ package object common {
 
   /** The unified interface of the stopwatch model. */
   trait StopwatchModel
-    extends StopwatchUIListener with StopwatchUIUpdateSource with Startable
+  extends StopwatchUIListener with StopwatchUIUpdateSource with Startable {
+    def getMemento(): StopwatchMemento
+    def restoreFromMemento(memento: StopwatchMemento)
+  }
+
+  /** A memento of the stopwatch state. */
+  trait StopwatchMemento extends Serializable {
+    val runTime: Int
+    val lapTime: Int
+  }
 }
