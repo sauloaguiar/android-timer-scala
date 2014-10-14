@@ -2,9 +2,10 @@
 
 ## Modeling
 
-* Modeling state-dependent behavior with state machine diagrams
+* Modeling state-dependent behavior with [state machine diagrams](http://en.wikipedia.org/wiki/UML_state_machine)
   (see also [here](/lucoodevcourse/stopwatch-android-scala/src/default/doc))
-* Distinguishing between view states and (behavioral) model states
+* Distinguishing between view states and (behavioral) model states 
+  (see also [here](http://cder.cs.luc.edu/html/chapter.html#interactive-behaviors-and-implicit-concurrency-with-internal-timers))
 
 ## Semantics
 
