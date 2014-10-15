@@ -18,8 +18,6 @@
 
 ## Architecture and Design
 
-http://butunclebob.com/ArticleS.UncleBob.PrinciplesOfOod
-
 * Key architectural issues and patterns
     * [Simple dependency injection (DI)](http://www.martinfowler.com/articles/injection.html)
     * [Model-view-adapter (MVA) architectural pattern](http://en.wikipedia.org/wiki/Model–view–adapter)
