@@ -8,7 +8,7 @@ import android.Keys._
 
 android.Plugin.androidBuild
 
-//instrumentSettings
+instrumentSettings
 
 name := "android-timer"
 
@@ -32,7 +32,7 @@ val androidJars = (platformJars in Android, baseDirectory) map {
 // Make the actually targeted Android jars available to Robolectric for shadowing.
 managedClasspath in Test <++= androidJars
 
-//managedClasspath in ScoverageCompile <++= androidJars
+managedClasspath in ScoverageCompile <++= androidJars
 
 // With this option, we cannot have dependencies in the test scope!
 debugIncludesTests in Android := false

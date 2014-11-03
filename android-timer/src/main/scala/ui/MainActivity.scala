@@ -4,6 +4,8 @@ package ui
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import edu.luc.etl.scala.timer.R
 
 /**
@@ -19,4 +21,9 @@ class MainActivity extends Activity with TypedActivity {
       // inject the (implicit) dependency on the view
       setContentView(R.layout.main)
     }
+
+    def onButtonPressed(view: View): Unit = {
+      Toast.makeText(getApplicationContext(), "Button Clicked", Toast.LENGTH_SHORT).show()
+    }
+
 }
