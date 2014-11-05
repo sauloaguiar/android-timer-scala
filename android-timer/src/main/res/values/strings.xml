@@ -9,5 +9,8 @@
     <!-- model state display names -->
     <string name="STOPPED">Stopped</string>
     <string name="RUNNING">Running</string>
-    <string name="BEEPING">Lap/Running</string>
+    <string name="BEEPING">Beeping</string>
+
+    <string name="INCREMENT">Increment</string>
+    <string name="STOP">Stop</string>
 </resources>
