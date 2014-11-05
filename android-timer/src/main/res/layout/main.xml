@@ -17,7 +17,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="40sp"
-                android:text="State"/>
+                />
     </RelativeLayout>
 
     <RelativeLayout
@@ -44,11 +44,11 @@
             android:layout_centerHorizontal="true" >
 
         <Button
-                android:id="@+id/startStop"
+                android:id="@+id/controlButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onButtonPressed"
-                android:text="@string/controlButton" />
+                android:text="Button" />
 
     </RelativeLayout>
 </RelativeLayout>
