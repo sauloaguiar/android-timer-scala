@@ -10,7 +10,7 @@ import model.time.TimeModel
 /**
  * Created by sauloaguiar on 11/3/14.
  */
-trait ConcreteTImeWatchModelFacade extends TimeWatchModel {
+trait ConcreteTimeWatchModelFacade extends TimeWatchModel {
 
   val timeModel: TimeModel = new DefaultTimeModel
   val clockModel: ClockModel = new DefaultClockModel(stateMachine)

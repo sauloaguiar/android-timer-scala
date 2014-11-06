@@ -34,6 +34,11 @@ package object common {
     extends UIHandling with TimeWatchUIUpdateSource with Startable {
   }
 
+  trait TimeWatchMemento {
+    val runTime: Int
+    val stateID: Int
+  }
+
   /* Trait for handling UI events */
   trait UIHandling {
     def onButtonPress(): Unit
