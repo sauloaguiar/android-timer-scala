@@ -8,10 +8,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import edu.luc.etl.scala.timer.common.Constants._
 import edu.luc.etl.scala.timer.common.{TimeWatchModel, TimerUIUpdateListener}
-import edu.luc.etl.scala.timer.R
-import model.ConcreteTImeWatchModelFacade
+import edu.luc.etl.scala.timer.model.ConcreteTimeWatchModelFacade
 
 /**
  * Created by sauloaguiar on 10/30/14.
@@ -19,7 +18,7 @@ import model.ConcreteTImeWatchModelFacade
 class MainActivity extends Activity with TypedActivity with TimerUIUpdateListener {
 
 
-  private val model: TimeWatchModel = new ConcreteTImeWatchModelFacade {
+  private val model: TimeWatchModel = new ConcreteTimeWatchModelFacade {
     lazy val listener = MainActivity.this
   }
 
@@ -50,7 +49,7 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
 
   override def updateTime(time: Int): Unit = runOnUiThread {
     val tvS = findView(TR.seconds)
-    val seconds = time % Constants.SEC_PER_MIN
+    val seconds = time % MAX_VALUE
     tvS.setText((seconds / 10).toString + (seconds % 10).toString)
   }
 

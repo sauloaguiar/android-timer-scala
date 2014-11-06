@@ -1,14 +1,9 @@
 package edu.luc.etl.scala.timer
 package model
 
-import java.io.IOException
-
-import android.media.MediaPlayer.OnCompletionListener
-import android.media.{AudioManager, MediaPlayer, RingtoneManager}
-import android.net.Uri
-import common.{TimerUIUpdateListener, UIHandling}
+import edu.luc.etl.scala.timer.common.{TimerUIUpdateListener, UIHandling}
 import edu.luc.etl.scala.timer.model.clock._
-import model.time.TimeModel
+import edu.luc.etl.scala.timer.model.time.TimeModel
 
 /**
  * Created by sauloaguiar on 10/30/14.
@@ -70,7 +65,7 @@ object state {
     def actionStop(): Unit = { clockModel.stop() }
     def actionInc(): Unit = {
       timeModel.incRuntime()
-      if (timeModel.isFull()){
+      if (timeModel.hasReachedMax()){
         toRunningState()
       } else {
         actionUpdateView()
