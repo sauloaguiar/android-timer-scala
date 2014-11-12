@@ -11,6 +11,7 @@ import android.view.View
 import edu.luc.etl.scala.timer.common.Constants._
 import edu.luc.etl.scala.timer.common.{TimeWatchMemento, TimeWatchModel, TimerUIUpdateListener}
 import edu.luc.etl.scala.timer.model.ConcreteTimeWatchModelFacade
+import java.io.IOException
 
 /**
  * Created by sauloaguiar on 10/30/14.
@@ -23,6 +24,7 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
   }
 
   private var mediaPlayer: MediaPlayer = _
+  private  var defaultRingtone: Uri = _
 
   private val TAG = "TimerWatchAndroid"
   override def onCreate(savedInstanceState: Bundle) {
@@ -36,19 +38,6 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
     super.onStart()
     Log.i(TAG, "onStart")
     model.onStart()
-  }
-
-  private val KEY = "timerKey"
-
-  override def onSaveInstanceState(savedInstanceState: Bundle): Unit = {
-    model.onStop()
-    savedInstanceState.putSerializable(KEY, model.getMemento())
-    super.onSaveInstanceState(savedInstanceState)
-  }
-
-  override def onRestoreInstanceState(savedInstanceState: Bundle): Unit = {
-    super.onRestoreInstanceState(savedInstanceState)
-    model.restoreFromMemento(savedInstanceState.getSerializable(KEY).asInstanceOf[TimeWatchMemento])
   }
 
   def onButtonPressed(view: View): Unit = {
@@ -80,19 +69,61 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
   /* Media Player Methods for playing sounds */
   def configurePlayer {
     mediaPlayer = new MediaPlayer()
-    val defaultRingtone: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+    //val defaultRingtone: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
     mediaPlayer.setDataSource(getApplicationContext(), defaultRingtone)
     mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM)
     mediaPlayer.prepare()
     mediaPlayer.setOnCompletionListener(new OnCompletionListener {
-      override def onCompletion(mp: MediaPlayer): Unit = mediaPlayer.release()
+      override def onCompletion(mp: MediaPlayer): Unit = mp.release()
     })
   }
 
   override def startBeeping(): Unit = {
+    defaultRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
     configurePlayer
     mediaPlayer.start()
   }
+  override def startBeepOnce(): Unit = {
+    playDefaultNotification()
+  }
+
+  protected def playDefaultNotification(): Unit = {
+    val defaultRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+    mediaPlayer = new MediaPlayer
+
+    try {
+      mediaPlayer.setDataSource(getApplicationContext, defaultRingtoneUri)
+      mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION)
+      mediaPlayer.prepare()
+      mediaPlayer.setOnCompletionListener(new OnCompletionListener {
+        override def onCompletion(mp: MediaPlayer): Unit = { mp.release() }
+      })
+      mediaPlayer.start()
+    } catch {
+      case ex: IOException =>  throw new RuntimeException(ex)
+    }
+
+
+  }
+
 
   override def stopBeeping(): Unit = mediaPlayer.stop()
+
+
+  private val KEY = "timewatch-memento"
+
+
+
+  override def onSaveInstanceState(savedInstanceState: Bundle): Unit = {
+    Log.i(TAG, "onSaveInstanceState")
+    savedInstanceState.putSerializable(KEY, model.getMemento)
+    model.onStop()
+    super.onSaveInstanceState(savedInstanceState)
+  }
+
+  override def onRestoreInstanceState(savedInstanceState: Bundle): Unit = {
+    super.onRestoreInstanceState(savedInstanceState)
+    Log.i(TAG, "onRestoreInstanceState")
+    model.restoreFromMemento(savedInstanceState.getSerializable(KEY).asInstanceOf[TimeWatchMemento])
+  }
 }

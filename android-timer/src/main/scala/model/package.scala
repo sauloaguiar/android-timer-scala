@@ -16,6 +16,7 @@ package object common {
     def updateState(stateId: Int, buttonLabelId: Int): Unit
     def startBeeping(): Unit
     def stopBeeping(): Unit
+    def startBeepOnce(): Unit
   }
 
   /** A component with a start/stop lifecycle tied to the app. */
