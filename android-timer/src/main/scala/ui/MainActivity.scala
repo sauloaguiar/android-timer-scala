@@ -102,8 +102,6 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
     } catch {
       case ex: IOException =>  throw new RuntimeException(ex)
     }
-
-
   }
 
 
