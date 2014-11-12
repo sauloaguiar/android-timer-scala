@@ -13,6 +13,7 @@ package object common {
     def updateState(stateId: Int, buttonLabelId: Int): Unit
     def startBeeping(): Unit
     def stopBeeping(): Unit
+    def startBeepOnce(): Unit
   }
 
   /** A component with a start/stop lifecycle tied to the app. */
@@ -32,9 +33,11 @@ package object common {
   /** The unified interface of the stopwatch model. */
   trait TimeWatchModel
     extends UIHandling with TimeWatchUIUpdateSource with Startable {
+    def getMemento(): String
+    def restoreFromMemento(memento: TimeWatchMemento): Unit
   }
 
-  trait TimeWatchMemento {
+  trait TimeWatchMemento extends Serializable{
     val runTime: Int
     val stateID: Int
   }
