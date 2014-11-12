@@ -15,6 +15,7 @@ object state {
   trait TimerStateMachine extends UIHandling with OnTickListener with Initializable {
     def getState(): TimerWatchState
     def actionUpdateView(): Unit
+    def getCurrentState(): Int
   }
 
   /** A state in a state machine. This interface is part of the State pattern. */
@@ -33,6 +34,7 @@ object state {
     clockModel: ClockModel,
     uiListener: TimerUIUpdateListener) extends TimerStateMachine {
 
+    def getCurrentState(): Int = state.getStateName()
     private var state: TimerWatchState = _
     private var timeoutClock: TimeoutModel = _
 
@@ -44,6 +46,7 @@ object state {
     }
 
     override def getState(): TimerWatchState = state
+
 
     // UI Based Events
     override def onButtonPress(): Unit = state.onButtonPress()

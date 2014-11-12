@@ -1,4 +1,7 @@
 package edu.luc.etl.scala.timer
+
+import java.io.Serializable
+
 /**
  * Created by sauloaguiar on 11/3/14.
  */
@@ -32,9 +35,11 @@ package object common {
   /** The unified interface of the stopwatch model. */
   trait TimeWatchModel
     extends UIHandling with TimeWatchUIUpdateSource with Startable {
+      def getMemento(): TimeWatchMemento
+      def restoreFromMemento(memento: TimeWatchMemento)
   }
 
-  trait TimeWatchMemento {
+  trait TimeWatchMemento extends Serializable {
     val runTime: Int
     val stateID: Int
   }

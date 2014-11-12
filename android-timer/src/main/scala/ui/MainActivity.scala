@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import edu.luc.etl.scala.timer.common.Constants._
-import edu.luc.etl.scala.timer.common.{TimeWatchModel, TimerUIUpdateListener}
+import edu.luc.etl.scala.timer.common.{TimeWatchMemento, TimeWatchModel, TimerUIUpdateListener}
 import edu.luc.etl.scala.timer.model.ConcreteTimeWatchModelFacade
 
 /**
@@ -36,6 +36,19 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
     super.onStart()
     Log.i(TAG, "onStart")
     model.onStart()
+  }
+
+  private val KEY = "timerKey"
+
+  override def onSaveInstanceState(savedInstanceState: Bundle): Unit = {
+    model.onStop()
+    savedInstanceState.putSerializable(KEY, model.getMemento())
+    super.onSaveInstanceState(savedInstanceState)
+  }
+
+  override def onRestoreInstanceState(savedInstanceState: Bundle): Unit = {
+    super.onRestoreInstanceState(savedInstanceState)
+    model.restoreFromMemento(savedInstanceState.getSerializable(KEY).asInstanceOf[TimeWatchMemento])
   }
 
   def onButtonPressed(view: View): Unit = {
