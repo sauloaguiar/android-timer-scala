@@ -103,7 +103,7 @@ object state {
     }
     def actionStartBeep(): Unit = { uiListener.startBeeping() }
     def actionStopBeep(): Unit = { uiListener.stopBeeping() }
-
+    def actionBeepOnce(): Unit = { uiListener.startBeepOnce() }
     // known states
     private val STOPPED = new TimerWatchState {
       override def getStateName(): Int = R.string.STOPPED
@@ -114,7 +114,9 @@ object state {
       override def onTimeout(): Unit = toRunningState()
 
       override def onEntry(): Unit = updateUIRuntime()
-      override def onExit(): Unit = actionStopTimeout()
+      override def onExit(): Unit = {
+        actionStopTimeout();
+        }
     }
 
     private val RUNNING = new TimerWatchState {
@@ -122,13 +124,19 @@ object state {
       override def updateView(): Unit = updateUIRuntime()
       override def onButtonPress(): Unit = { actionReset(); toStoppedState() }
       override def onTick(): Unit = {
+        timeModel.setResumeFlag(false);
         actionDec()
         if (timeModel.hasTimedOut()){
           toBeepingState()
         }
       }
       override def getStateButtonAction(): Int = R.string.STOP
-      override def onEntry(): Unit = clockModel.start()
+      override def onEntry(): Unit ={
+        if(!timeModel.isResume()) actionBeepOnce()
+        //if(!timeModel.isResume()) actionStopBeep()
+
+        clockModel.start()
+      }
       override def onExit(): Unit = clockModel.stop()
     }
 
