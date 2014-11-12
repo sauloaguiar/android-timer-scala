@@ -44,6 +44,7 @@ package object common {
     val runTime: Int
     val stateID: Int
     val resumeFlag : Boolean
+    val resumeStateFlag : Boolean
   }
 
   /* Trait for handling UI events */
