@@ -40,6 +40,19 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
     model.onStart()
   }
 
+  private val KEY = "timerKey"
+
+  override def onSaveInstanceState(savedInstanceState: Bundle): Unit = {
+    model.onStop()
+    savedInstanceState.putSerializable(KEY, model.getMemento())
+    super.onSaveInstanceState(savedInstanceState)
+  }
+
+  override def onRestoreInstanceState(savedInstanceState: Bundle): Unit = {
+    super.onRestoreInstanceState(savedInstanceState)
+    model.restoreFromMemento(savedInstanceState.getSerializable(KEY).asInstanceOf[TimeWatchMemento])
+  }
+
   def onButtonPressed(view: View): Unit = {
     model.onButtonPress()
   }
