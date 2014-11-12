@@ -44,6 +44,20 @@ object state {
       state.onEntry()
       uiListener.updateState(state.getStateName(), state.getStateButtonAction())
     }
+    def resumeState(newState: TimerWatchState, runtime: Int): Unit = {
+      if (state != null) state.onExit()
+      // actionInit()
+      timeModel.setRuntime(runtime)
+      state = newState
+      //Log.i("TimerWatchAndroid","RESUME STATE UPDATE VIEW " + timeModel.getRuntime())
+      actionUpdateView() //update time state.updateView
+      //
+      //actionStart()
+      state.onEntry()
+
+      uiListener.updateState(state.getStateName(), state.getStateButtonAction())
+
+    }
 
     override def getState(): TimerWatchState = state
 
