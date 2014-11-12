@@ -27,6 +27,10 @@ trait ConcreteTimeWatchModelFacade extends TimeWatchModel {
   override def getMemento() = new TimeWatchMemento {
     override val runTime: Int = timeModel.getRuntime()
     override val stateID: Int = stateMachine.getCurrentState()
+    override val resumeStateFlag:  Boolean = stateMachine.getCurrentState() match {
+      case R.string.STOPPED => stateMachine.actionStopTimeout(); true
+      case _ => false
+    }
     override val resumeFlag : Boolean ={
       val result = stateMachine.getCurrentState() match {
         case R.string.STOPPED => false
@@ -42,8 +46,9 @@ trait ConcreteTimeWatchModelFacade extends TimeWatchModel {
   override def restoreFromMemento(memento: TimeWatchMemento): Unit = {
     timeModel.setRuntime(memento.runTime)
     timeModel.setResumeFlag(memento.resumeFlag)
+    stateMachine.setResumeStateFlag(memento.resumeStateFlag)
     memento.stateID match {
-      case R.string.STOPPED => stateMachine.toStoppedState()
+      case R.string.STOPPED => stateMachine.toStoppedState();
       case R.string.BEEPING => stateMachine.toBeepingState()
       case R.string.RUNNING => stateMachine.toRunningState()
     }

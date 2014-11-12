@@ -73,9 +73,9 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
     mediaPlayer.setDataSource(getApplicationContext(), defaultRingtone)
     mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM)
     mediaPlayer.prepare()
-    mediaPlayer.setOnCompletionListener(new OnCompletionListener {
+   /* mediaPlayer.setOnCompletionListener(new OnCompletionListener {
       override def onCompletion(mp: MediaPlayer): Unit = mp.release()
-    })
+    })*/
   }
 
   override def startBeeping(): Unit = {
@@ -96,9 +96,9 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
       mediaPlayer.setDataSource(getApplicationContext, defaultRingtoneUri)
       mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION)
       mediaPlayer.prepare()
-      mediaPlayer.setOnCompletionListener(new OnCompletionListener {
+      /*mediaPlayer.setOnCompletionListener(new OnCompletionListener {
         override def onCompletion(mp: MediaPlayer): Unit = { mp.release() }
-      })
+      })*/
       mediaPlayer.start()
      // mediaPlayer.wait(2000)
      // mediaPlayer.stop()
@@ -109,9 +109,14 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
 
 
   override def stopBeeping(): Unit = {
-    if(mediaPlayer != null){
-      mediaPlayer.stop()
-      mediaPlayer.reset()
+
+      //Log.i("TimerWatchAndroid","MEDIPLSYER!!!!!! "+mediaPlayer)
+      if(mediaPlayer != null){
+        mediaPlayer.release()
+        /*if() {
+          mediaPlayer.stop()
+          mediaPlayer.reset()
+        }*/
     }
   }
 
@@ -124,7 +129,12 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
     Log.i(TAG, "onSaveInstanceState")
     savedInstanceState.putSerializable(KEY, model.getMemento)
     model.onStop()
-    if(mediaPlayer != null) mediaPlayer.reset()
+    //model.
+    /*if (mediaPlayer != null) {
+      mediaPlayer.stop()
+      mediaPlayer.reset()
+  }*/
+    stopBeeping()
     super.onSaveInstanceState(savedInstanceState)
   }
 
