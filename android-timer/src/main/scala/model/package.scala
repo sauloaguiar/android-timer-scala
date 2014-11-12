@@ -43,6 +43,7 @@ package object common {
   trait TimeWatchMemento extends Serializable {
     val runTime: Int
     val stateID: Int
+    val resumeFlag : Boolean
   }
 
   /* Trait for handling UI events */

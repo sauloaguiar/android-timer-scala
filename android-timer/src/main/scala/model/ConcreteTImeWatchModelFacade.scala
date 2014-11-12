@@ -1,6 +1,7 @@
 package edu.luc.etl.scala.timer
 package model
 
+import android.util.Log
 import edu.luc.etl.scala.timer.common.{TimeWatchMemento, TimeWatchModel}
 import edu.luc.etl.scala.timer.model.clock._
 import edu.luc.etl.scala.timer.model.state.DefaultTimerWatchStateMachine
@@ -26,10 +27,21 @@ trait ConcreteTimeWatchModelFacade extends TimeWatchModel {
   override def getMemento() = new TimeWatchMemento {
     override val runTime: Int = timeModel.getRuntime()
     override val stateID: Int = stateMachine.getCurrentState()
+    override val resumeFlag : Boolean ={
+      val result = stateMachine.getCurrentState() match {
+        case R.string.STOPPED => false
+        case R.string.BEEPING => false
+        case R.string.RUNNING => true
+        case _ => false
+      }
+      Log.i("TimerWatchAndroid","GET MEMENTO RESUME FLAG "+result)
+      result
+      }
   }
 
   override def restoreFromMemento(memento: TimeWatchMemento): Unit = {
     timeModel.setRuntime(memento.runTime)
+    timeModel.setResumeFlag(memento.resumeFlag)
     memento.stateID match {
       case R.string.STOPPED => stateMachine.toStoppedState()
       case R.string.BEEPING => stateMachine.toBeepingState()

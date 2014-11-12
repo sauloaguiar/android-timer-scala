@@ -85,7 +85,8 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
   }
   override def startBeepOnce(): Unit = {
     playDefaultNotification()
-  }
+
+    }
 
   protected def playDefaultNotification(): Unit = {
     val defaultRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -99,13 +100,20 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
         override def onCompletion(mp: MediaPlayer): Unit = { mp.release() }
       })
       mediaPlayer.start()
+     // mediaPlayer.wait(2000)
+     // mediaPlayer.stop()
     } catch {
       case ex: IOException =>  throw new RuntimeException(ex)
     }
   }
 
 
-  override def stopBeeping(): Unit = mediaPlayer.stop()
+  override def stopBeeping(): Unit = {
+    if(mediaPlayer != null){
+      mediaPlayer.stop()
+      mediaPlayer.reset()
+    }
+  }
 
 
   private val KEY = "timewatch-memento"
@@ -116,6 +124,7 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
     Log.i(TAG, "onSaveInstanceState")
     savedInstanceState.putSerializable(KEY, model.getMemento)
     model.onStop()
+    if(mediaPlayer != null) mediaPlayer.reset()
     super.onSaveInstanceState(savedInstanceState)
   }
 
