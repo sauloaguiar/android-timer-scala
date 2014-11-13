@@ -24,7 +24,6 @@ object state {
     def onEntry(): Unit
     def onExit(): Unit
     def updateView(): Unit
-   // def restartTimeout: Unit
     def getStateName(): Int
     def getStateButtonAction(): Int
     def onTimeout(): Unit = throw new UnsupportedOperationException("onTimeout")
@@ -47,25 +46,8 @@ object state {
       state.onEntry()
       uiListener.updateState(state.getStateName(), state.getStateButtonAction())
     }
-    def setResumeStateFlag(newStateFlag: Boolean){ resumeStateFlag = newStateFlag}
-
-    /*def resumeState(newState: TimerWatchState, runtime: Int): Unit = {
-      if (state != null) state.onExit()
-      // actionInit()
-      timeModel.setRuntime(runtime)
-      state = newState
-      //Log.i("TimerWatchAndroid","RESUME STATE UPDATE VIEW " + timeModel.getRuntime())
-      actionUpdateView() //update time state.updateView
-      //
-      //actionStart()
-      state.onEntry()
-
-      uiListener.updateState(state.getStateName(), state.getStateButtonAction())
-
-    }*/
 
     override def getState(): TimerWatchState = state
-
 
     // UI Based Events
     override def onButtonPress(): Unit = state.onButtonPress()
@@ -106,9 +88,7 @@ object state {
       timeoutClock.restartTimeout(3)
     }
     private val TAG = "TimerWatchAndroid"
-    //def onResumeStoppedState(stoppedState: TimerWatchState): Unit = { actionRestartTimeout(state.this) }
     def actionStopTimeout(): Unit = {
-
       if (timeoutClock != null) {
         Log.i(TAG, "Stop timeOut")
         timeoutClock.stopTimeout()
@@ -118,50 +98,29 @@ object state {
     def actionStartBeep(): Unit = { uiListener.startBeeping() }
     def actionStopBeep(): Unit = { uiListener.stopBeeping() }
     def actionBeepOnce(): Unit = { uiListener.startBeepOnce() }
+
     // known states
     private val STOPPED = new TimerWatchState {
       override def getStateName(): Int = R.string.STOPPED
       override def updateView(): Unit = { updateUIRuntime(); enableButton() }
       override def onButtonPress(): Unit = { if(timeModel.isValid()) toRunningState() }
-      //override def onButtonPress(): Unit = { actionInc(); actionRestartTimeout(this) }
-      //def onResumeStoppedState(): Unit = { actionRestartTimeout(this) }
-      //override def restartTimeout: Unit = { actionRestartTimeout(this) }
       override def getStateButtonAction(): Int = R.string.START
-
-      //override def onTimeout(): Unit = toRunningState()
-
       override def onEntry(): Unit = {
-        /*if(resumeStateFlag) {
-          actionRestartTimeout(this)
-        }
-        setResumeStateFlag(false)*/
         Log.i(TAG, "STOPPED entry")
         enableButton()
         updateUIRuntime()
       }
-      override def onExit(): Unit = {
-        //actionStopTimeout()
-        //disableButton()
-        Log.i(TAG, "STOPPED exit")
-      }
+      override def onExit(): Unit = { Log.i(TAG, "STOPPED exit") }
 
     }
 
     private val STOPPED_COUNTING = new TimerWatchState {
-
       override def getStateButtonAction(): Int = R.string.START
-
-      // def restartTimeout: Unit
       override def getStateName(): Int = R.string.STOPPED
-
-      override def onExit(): Unit = { actionStopTimeout(); disableButton(); Log.i(TAG, "STOPPED_COUNTING exit") }
-
+      override def onExit(): Unit = { actionStopTimeout(); Log.i(TAG, "STOPPED_COUNTING exit") }
       override def updateView(): Unit = updateUIRuntime()
-
       override def onEntry(): Unit = {actionRestartTimeout(this); Log.i(TAG, "STOPPED_COUNTING entry") }
-
       override def onButtonPress(): Unit = { if(timeModel.isValid()) toRunningState() }
-
       override def onTimeout(): Unit = { if(timeModel.isValid()) toRunningState() }
     }
 
@@ -170,22 +129,17 @@ object state {
       override def updateView(): Unit = updateUIRuntime()
       override def onButtonPress(): Unit = { actionReset(); toStoppedState() }
       override def onTick(): Unit = {
-        //timeModel.setResumeFlag(false);
         actionDec()
         if (timeModel.hasTimedOut()){
           toBeepingState()
         }
       }
-      //override def restartTimeout: Unit = {}
       override def getStateButtonAction(): Int = R.string.STOP
       override def onEntry(): Unit = {
         Log.i(TAG, "RUNNING entry")
         actionBeepOnce()
-        //if(!timeModel.isResume()) actionBeepOnce()
-        //if(!timeModel.isResume()) actionStopBeep()
-
         clockModel.start()
-        //disableButton()
+        disableButton()
       }
       override def onExit(): Unit = { clockModel.stop(); Log.i(TAG, "RUNNING exit") }
     }
@@ -197,7 +151,6 @@ object state {
       override def getStateButtonAction(): Int = R.string.STOP
       override def onEntry(): Unit = { enableButton(); actionStartBeep() }
       override def onExit(): Unit = actionStopBeep()
-      //override def restartTimeout: Unit = {}
     }
   }
 
