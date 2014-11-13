@@ -10,6 +10,7 @@ object time {
 
   // Passive data model for the timer
   trait TimeModel {
+    def isValid(): Boolean
     def hasReachedMax(): Boolean
     def isResume(): Boolean
     def setResumeFlag(flag: Boolean): Unit
@@ -28,11 +29,17 @@ object time {
     private var isResumeFlag = false
     private val MAX = 99
 
+    override def isValid(): Boolean = runningTime > 0
     override def resetRuntime(): Unit = runningTime = 0
     override def incRuntime(): Unit = runningTime = runningTime + SEC_PER_TICK
-    override def setRuntime(value: Int): Unit = runningTime = value
+    override def setRuntime(value: Int): Unit = {
+      if ( value >= 0 || value <= 99) runningTime = value
+      else throw new IllegalArgumentException("Only positive values below 100")
+    }
     override def getRuntime(): Int = runningTime
-    override def decRuntime(): Unit =  runningTime = runningTime - SEC_PER_TICK
+    override def decRuntime(): Unit =  {
+      if ( runningTime > 0) runningTime = runningTime - SEC_PER_TICK
+    }
     override def isResume(): Boolean = isResumeFlag
     override def setResumeFlag(flag: Boolean): Unit = isResumeFlag = flag
     override def hasTimedOut(): Boolean = runningTime == 0

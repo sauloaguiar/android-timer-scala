@@ -4,7 +4,8 @@
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp" >
+                android:layout_marginTop="10dp"
+                android:background="@android:color/background_dark">
 
     <RelativeLayout
             android:id="@+id/state"
@@ -27,13 +28,17 @@
             android:layout_below="@id/state"
             android:layout_centerHorizontal="true" >
 
-        <TextView
+        <EditText
                 android:id="@+id/seconds"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/seconds"
                 android:textSize="80sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:background="@android:color/background_dark"
+                android:textColor="@android:color/white"
+                android:inputType="number"
+                android:maxLength="2"/>
     </RelativeLayout>
 
     <RelativeLayout
