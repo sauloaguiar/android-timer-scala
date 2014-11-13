@@ -98,13 +98,9 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
   /* Media Player Methods for playing sounds */
   def configurePlayer {
     mediaPlayer = new MediaPlayer()
-    //val defaultRingtone: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
     mediaPlayer.setDataSource(getApplicationContext(), defaultRingtone)
     mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM)
     mediaPlayer.prepare()
-   /* mediaPlayer.setOnCompletionListener(new OnCompletionListener {
-      override def onCompletion(mp: MediaPlayer): Unit = mp.release()
-    })*/
   }
 
   override def startBeeping(): Unit = {
@@ -114,8 +110,7 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
   }
   override def startBeepOnce(): Unit = {
     playDefaultNotification()
-
-    }
+  }
 
   protected def playDefaultNotification(): Unit = {
     val defaultRingtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -125,17 +120,11 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
       mediaPlayer.setDataSource(getApplicationContext, defaultRingtoneUri)
       mediaPlayer.setAudioStreamType(AudioManager.STREAM_NOTIFICATION)
       mediaPlayer.prepare()
-      /*mediaPlayer.setOnCompletionListener(new OnCompletionListener {
-        override def onCompletion(mp: MediaPlayer): Unit = { mp.release() }
-      })*/
       mediaPlayer.start()
-     // mediaPlayer.wait(2000)
-     // mediaPlayer.stop()
     } catch {
       case ex: IOException =>  throw new RuntimeException(ex)
     }
   }
-
 
   override def stopBeeping(): Unit = {
     if(mediaPlayer != null){
