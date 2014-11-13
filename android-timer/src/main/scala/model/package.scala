@@ -1,7 +1,5 @@
 package edu.luc.etl.scala.timer
 
-import java.io.Serializable
-
 /**
  * Created by sauloaguiar on 11/3/14.
  */
@@ -12,6 +10,7 @@ package object common {
    * notifications coming from the model.
    */
   trait TimerUIUpdateListener {
+    def enableButton(b: Boolean): Unit
     def updateTime(timeValue: Int): Unit
     def updateState(stateId: Int, buttonLabelId: Int): Unit
     def startBeeping(): Unit
@@ -34,22 +33,14 @@ package object common {
   }
 
   /** The unified interface of the stopwatch model. */
-  trait TimeWatchModel
-    extends UIHandling with TimeWatchUIUpdateSource with Startable {
-      def getMemento(): TimeWatchMemento
-      def restoreFromMemento(memento: TimeWatchMemento)
-  }
+  trait TimeWatchModel extends UIHandling with TimeWatchUIUpdateSource with Startable {
 
-  trait TimeWatchMemento extends Serializable {
-    val runTime: Int
-    val stateID: Int
-    val resumeFlag : Boolean
-    val resumeStateFlag : Boolean
   }
 
   /* Trait for handling UI events */
   trait UIHandling {
     def onButtonPress(): Unit
+    def onTimerChanged(value: Int): Unit
   }
 
 }

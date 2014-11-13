@@ -13,4 +13,5 @@
 
     <string name="INCREMENT">Increment</string>
     <string name="STOP">Stop</string>
+    <string name="START">Start</string>
 </resources>

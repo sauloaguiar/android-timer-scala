@@ -1,17 +1,18 @@
 package edu.luc.etl.scala.timer
 package ui
 
+import java.io.IOException
+
 import android.app.Activity
-import android.media.MediaPlayer.OnCompletionListener
 import android.media.{AudioManager, MediaPlayer, RingtoneManager}
 import android.net.Uri
 import android.os.Bundle
+import android.text.{Editable, TextWatcher}
 import android.util.Log
-import android.view.View
+import android.view.{KeyEvent, View}
 import edu.luc.etl.scala.timer.common.Constants._
-import edu.luc.etl.scala.timer.common.{TimeWatchMemento, TimeWatchModel, TimerUIUpdateListener}
+import edu.luc.etl.scala.timer.common.{TimeWatchModel, TimerUIUpdateListener}
 import edu.luc.etl.scala.timer.model.ConcreteTimeWatchModelFacade
-import java.io.IOException
 
 /**
  * Created by sauloaguiar on 10/30/14.
@@ -25,13 +26,40 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
 
   private var mediaPlayer: MediaPlayer = _
   private  var defaultRingtone: Uri = _
+  private var userUpdated = true
 
   private val TAG = "TimerWatchAndroid"
+
+  def startWatchingText(): Unit = {
+    findView(TR.seconds).addTextChangedListener(new TextWatcher {
+      override def beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int): Unit = {}
+      override def onTextChanged(s: CharSequence, start: Int, before: Int, count: Int): Unit = {
+      }
+      override def afterTextChanged(s: Editable): Unit = {
+        if(userUpdated){
+          if (s.toString.trim.isEmpty) 0
+          else model.onTimerChanged(s.toString.trim.toInt)
+        }
+      }
+    })
+
+    findView(TR.seconds).setOnKeyListener(new View.OnKeyListener {
+      override def onKey(v: View, keyCode: Int, event: KeyEvent): Boolean = {
+        if((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+          Log.i(TAG, "enter pressed")
+          model.onButtonPress()
+          true
+        } else false
+      }
+    })
+  }
+
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(savedInstanceState)
     Log.i(TAG, "onCreate")
     // inject the (implicit) dependency on the view
     setContentView(R.layout.main)
+    startWatchingText()
   }
 
   override def onStart(): Unit = {
@@ -48,11 +76,12 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
   def runOnUiThread(block: => Unit): Unit =
     runOnUiThread(new Runnable() { override def run(): Unit = block })
 
-
   override def updateTime(time: Int): Unit = runOnUiThread {
+    userUpdated = false
     val tvS = findView(TR.seconds)
     val seconds = time % MAX_VALUE
     tvS.setText((seconds / 10).toString + (seconds % 10).toString)
+    userUpdated = true
   }
 
   /**
@@ -109,32 +138,14 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
 
 
   override def stopBeeping(): Unit = {
-
-      //Log.i("TimerWatchAndroid","MEDIPLSYER!!!!!! "+mediaPlayer)
-      if(mediaPlayer != null){
-        mediaPlayer.release()
-        /*if() {
-          mediaPlayer.stop()
-          mediaPlayer.reset()
-        }*/
+    if(mediaPlayer != null){
+      mediaPlayer.release()
     }
   }
 
-
-  private val KEY = "timewatch-memento"
-
-
-
-  override def onSaveInstanceState(savedInstanceState: Bundle): Unit = {
-    Log.i(TAG, "onSaveInstanceState")
-    savedInstanceState.putSerializable(KEY, model.getMemento)
-    model.onStop()
-    super.onSaveInstanceState(savedInstanceState)
-  }
-
-  override def onRestoreInstanceState(savedInstanceState: Bundle): Unit = {
-    super.onRestoreInstanceState(savedInstanceState)
-    Log.i(TAG, "onRestoreInstanceState")
-    model.restoreFromMemento(savedInstanceState.getSerializable(KEY).asInstanceOf[TimeWatchMemento])
+  override def enableButton(boolean: Boolean): Unit = {
+    runOnUiThread {
+      findView(TR.seconds).setEnabled(boolean)
+    }
   }
 }
