@@ -138,4 +138,10 @@ class UnifiedMockDependency extends TimeModel with ClockModel with TimerUIUpdate
   override def startBeeping(): Unit = beeping = true
   override def updateState(stateId: Int, buttonLabelId: Int): Unit = this.stateID = stateId
   override def updateTime(timeValue: Int): Unit = this.timeValue = timeValue
+
+  override def isResume(): Boolean = true
+
+  override def setResumeFlag(flag: Boolean): Unit = println()
+
+  override def startBeepOnce(): Unit = println()
 }
