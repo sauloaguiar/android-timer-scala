@@ -129,12 +129,6 @@ class MainActivity extends Activity with TypedActivity with TimerUIUpdateListene
     Log.i(TAG, "onSaveInstanceState")
     savedInstanceState.putSerializable(KEY, model.getMemento)
     model.onStop()
-    //model.
-    /*if (mediaPlayer != null) {
-      mediaPlayer.stop()
-      mediaPlayer.reset()
-  }*/
-    stopBeeping()
     super.onSaveInstanceState(savedInstanceState)
   }
 
