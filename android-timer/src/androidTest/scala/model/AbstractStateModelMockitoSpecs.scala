@@ -30,10 +30,7 @@ trait AbstractStateModelMockitoSpecs extends JUnitSuite with MockitoSugar {
   trait Dependencies {
     val timeModel: TimeModel
     val clockModel: ClockModel
-    //val timeoutClockModel: TimeoutModel
     val uiUpdateListener: TimerUIUpdateListener
-    //val onTimeoutListener : OnTimeoutListener
-
   }
 
   /** Creates an instance of the SUT. */
@@ -43,9 +40,7 @@ trait AbstractStateModelMockitoSpecs extends JUnitSuite with MockitoSugar {
   def fixtureDependency() = new Dependencies {
     override val timeModel = mock[TimeModel]
     override val clockModel = mock[ClockModel]
-   // override val timeoutClockModel = mock[TimeoutModel]
     override val uiUpdateListener = mock[TimerUIUpdateListener]
-    //override val onTimeoutListener = mock[OnTimeoutListener]
   }
 
   /**
@@ -58,7 +53,6 @@ trait AbstractStateModelMockitoSpecs extends JUnitSuite with MockitoSugar {
     model.actionInit()
     verify(dep.uiUpdateListener).updateState(R.string.STOPPED, R.string.INCREMENT)
     verify(dep.uiUpdateListener).updateTime(0)
-    //verifyNoMoreInteractions(dep.uiUpdateListener, dep.clockModel)
  }
 
   /**
@@ -70,7 +64,6 @@ trait AbstractStateModelMockitoSpecs extends JUnitSuite with MockitoSugar {
     val model = fixtureSUT(dep)
     val t = 5
     model.actionInit()
-    //(1 to 5) foreach { _ => model.onButtonPress() }
     verify(dep.clockModel, never).start()
     verify(dep.timeModel, never).incRuntime()
     verify(dep.uiUpdateListener).updateState(R.string.STOPPED,R.string.INCREMENT)
@@ -78,12 +71,6 @@ trait AbstractStateModelMockitoSpecs extends JUnitSuite with MockitoSugar {
     (1 to 5) foreach { _ => model.onButtonPress() }
     verify(dep.timeModel, times(5)).incRuntime()
     verify(dep.uiUpdateListener,times(6)).updateTime(anyInt)
-    //verify(model,times(5)).actionRestartTimeout()
-
-    /*(1 to t) foreach { _ => model.onTick() }
-    verify(dep.timeModel, times(t)).incRuntime()
-    verify(dep.uiUpdateListener, times(t + 1)).updateTime(anyInt)
-    verifyNoMoreInteractions(dep.clockModel)*/
   }
 
   /**
@@ -106,22 +93,16 @@ trait AbstractStateModelMockitoSpecs extends JUnitSuite with MockitoSugar {
     verify(dep.clockModel).start()
     verify(dep.uiUpdateListener).updateState(R.string.RUNNING, R.string.STOP)
     model.getState().onTick()
-    //model.onTick()
     verify(dep.timeModel).decRuntime()
     verify(dep.uiUpdateListener, times(3)).updateTime(anyInt)
     verify(dep.timeModel).hasTimedOut()
     when(dep.timeModel.hasTimedOut()).thenReturn(true)
 
     model.getState().onTick()
-    //model.onTick()
     verify(dep.timeModel, atLeast(2)).decRuntime()
-    //verify(dep.uiUpdateListener, times(3)).updateTime(anyInt)
     verify(dep.timeModel, atLeast(2)).hasTimedOut()
     when(dep.timeModel.hasTimedOut()).thenReturn(true)
 
-    println("OOOOO "+model.getState().getStateName())
-    //model.getState().onExit()
-    println("OOOO1 "+dep.timeModel.getRuntime())
     verify(dep.uiUpdateListener).startBeeping()
     verify(dep.uiUpdateListener).updateState(R.string.BEEPING, R.string.STOP)
     model.onButtonPress()
@@ -129,30 +110,4 @@ trait AbstractStateModelMockitoSpecs extends JUnitSuite with MockitoSugar {
     verify(dep.uiUpdateListener, atLeast(2)).updateState(R.string.STOPPED, R.string.INCREMENT)
   }
 
-  /*@Test def testScenarioRun(): Unit = {
-    val dep = fixtureDependency()
-    val model = fixtureSUT(dep)
-    model.actionInit()
-    verify(dep.uiUpdateListener,times(2)).updateTime(0)
-    verify(dep.uiUpdateListener).updateState(R.string.STOPPED, R.string.INCREMENT)
-    verify(dep.uiUpdateListener,times(2)).updateTime(0)
-
-    verify(dep.uiUpdateListener).updateState(R.string.STOPPED, R.string.INCREMENT)
-    (1 to 99) foreach { _ => model.onButtonPress()}
-    verify(dep.timeModel,times(99)).incRuntime()
-    verify(dep.uiUpdateListener, times(101)).updateTime(anyInt)
-    when(dep.timeModel.getRuntime()).thenReturn(99)
-    model.getState().onTimeout()
-    verify(dep.clockModel).start()
-    verify(dep.uiUpdateListener).updateState(R.string.RUNNING, R.string.STOP)
-    (1 to 99) foreach{ _ => model.onTick()}
-    verify(dep.timeModel,times(99)).decRuntime()
-    verify(dep.uiUpdateListener,times(101)).updateTime(anyInt)
-    when(dep.timeModel.hasTimedOut()).thenReturn(true)
-    verify(dep.uiUpdateListener).startBeeping()
-    model.onButtonPress()
-    verify(dep.uiUpdateListener).stopBeeping()
-    verify(dep.uiUpdateListener).updateState(R.string.STOPPED, R.string.STOP)
-
-  }*/
 }
