@@ -62,8 +62,8 @@ object state {
 
     //
     def updateUIRuntime(): Unit = uiListener.updateTime(timeModel.getRuntime)
-    def enableButton(): Unit = uiListener.enableButton(true)
-    def disableButton(): Unit = uiListener.enableButton(false)
+    def enableTimeEdition(): Unit = uiListener.enableButton(true)
+    def disableTimeEdition(): Unit = uiListener.enableButton(false)
 
     // actions
     override def actionInit(): Unit = { toStoppedState(); actionReset() }
@@ -102,15 +102,16 @@ object state {
     // known states
     private val STOPPED = new TimerWatchState {
       override def getStateName(): Int = R.string.STOPPED
-      override def updateView(): Unit = { updateUIRuntime(); enableButton() }
-      override def onButtonPress(): Unit = { if(timeModel.isValid()) toRunningState() }
-      override def getStateButtonAction(): Int = R.string.START
+      override def updateView(): Unit = { updateUIRuntime() }
+      override def onButtonPress(): Unit = { disableTimeEdition(); actionInc(); actionRestartTimeout(this) }
+      override def getStateButtonAction(): Int = R.string.INCREMENT
       override def onEntry(): Unit = {
         Log.i(TAG, "STOPPED entry")
-        enableButton()
+        enableTimeEdition()
         updateUIRuntime()
       }
-      override def onExit(): Unit = { Log.i(TAG, "STOPPED exit") }
+      override def onExit(): Unit = { Log.i(TAG, "STOPPED exit"); actionStopTimeout() }
+      override def onTimeout(): Unit = toRunningState()
 
     }
 
@@ -139,7 +140,7 @@ object state {
         Log.i(TAG, "RUNNING entry")
         actionBeepOnce()
         clockModel.start()
-        disableButton()
+        disableTimeEdition()
       }
       override def onExit(): Unit = { clockModel.stop(); Log.i(TAG, "RUNNING exit") }
     }
@@ -149,7 +150,7 @@ object state {
       override def updateView(): Unit = updateUIRuntime()
       override def onButtonPress(): Unit = { actionReset(); toStoppedState() }
       override def getStateButtonAction(): Int = R.string.STOP
-      override def onEntry(): Unit = { enableButton(); actionStartBeep() }
+      override def onEntry(): Unit = { enableTimeEdition(); actionStartBeep() }
       override def onExit(): Unit = actionStopBeep()
     }
   }
