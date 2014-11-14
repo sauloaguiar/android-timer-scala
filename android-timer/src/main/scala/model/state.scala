@@ -1,7 +1,6 @@
 package edu.luc.etl.scala.timer
 package model
 
-import android.util.Log
 import edu.luc.etl.scala.timer.common.{TimerUIUpdateListener, UIHandling}
 import edu.luc.etl.scala.timer.model.clock._
 import edu.luc.etl.scala.timer.model.time.TimeModel
@@ -73,15 +72,15 @@ object state {
     def actionStop(): Unit = { clockModel.stop() }
     def actionInc(): Unit = {
       timeModel.incRuntime()
-      if (timeModel.hasReachedMax()){
+      if (timeModel.hasReachedMax()) {
         toRunningState()
       } else {
         actionUpdateView()
       }
     }
+
     def actionDec(): Unit = { timeModel.decRuntime(); actionUpdateView() }
     def actionRestartTimeout(listener: OnTimeoutListener): Unit = {
-      Log.i(TAG, "Start timeOut")
       if (timeoutClock == null) {
         timeoutClock = new DefaultTimeoutModel(listener)
       }
@@ -90,7 +89,6 @@ object state {
     private val TAG = "TimerWatchAndroid"
     def actionStopTimeout(): Unit = {
       if (timeoutClock != null) {
-        Log.i(TAG, "Stop timeOut")
         timeoutClock.stopTimeout()
         timeoutClock = null
       }
@@ -105,22 +103,17 @@ object state {
       override def updateView(): Unit = { updateUIRuntime() }
       override def onButtonPress(): Unit = { disableTimeEdition(); actionInc(); actionRestartTimeout(this) }
       override def getStateButtonAction(): Int = R.string.INCREMENT
-      override def onEntry(): Unit = {
-        Log.i(TAG, "STOPPED entry")
-        enableTimeEdition()
-        updateUIRuntime()
-      }
-      override def onExit(): Unit = { Log.i(TAG, "STOPPED exit"); actionStopTimeout() }
+      override def onEntry(): Unit = { enableTimeEdition() }
+      override def onExit(): Unit = { actionStopTimeout() }
       override def onTimeout(): Unit = toRunningState()
-
     }
 
     private val STOPPED_COUNTING = new TimerWatchState {
       override def getStateButtonAction(): Int = R.string.START
       override def getStateName(): Int = R.string.STOPPED
-      override def onExit(): Unit = { actionStopTimeout(); Log.i(TAG, "STOPPED_COUNTING exit") }
+      override def onExit(): Unit = { actionStopTimeout() }
       override def updateView(): Unit = updateUIRuntime()
-      override def onEntry(): Unit = {actionRestartTimeout(this); Log.i(TAG, "STOPPED_COUNTING entry") }
+      override def onEntry(): Unit = {actionRestartTimeout(this) }
       override def onButtonPress(): Unit = { if(timeModel.isValid()) toRunningState() }
       override def onTimeout(): Unit = { if(timeModel.isValid()) toRunningState() }
     }
@@ -137,12 +130,11 @@ object state {
       }
       override def getStateButtonAction(): Int = R.string.STOP
       override def onEntry(): Unit = {
-        Log.i(TAG, "RUNNING entry")
         actionBeepOnce()
         clockModel.start()
         disableTimeEdition()
       }
-      override def onExit(): Unit = { clockModel.stop(); Log.i(TAG, "RUNNING exit") }
+      override def onExit(): Unit = { clockModel.stop() }
     }
 
     private val BEEPING = new TimerWatchState {
